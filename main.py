@@ -70,6 +70,11 @@ async def delete_list(ctx):
       await ctx.send(f"A lista **#{message.content}** foi **DELETADA** com sucesso!")
     if result is False:
       await ctx.send(f"**NÃO foi possível deletar a lista informada!** \n Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário e não pode ser deletada por outro(s)")
+
+
+  if 'tarefa'in ctx.message.content:
+    queries.delete_task_list_user(1, ctx.author.id, 1)
+
   else:
     await ctx.send("Comando desconhecido. Caso tenha dúvidas, digite +help")
     return

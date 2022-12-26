@@ -55,3 +55,16 @@ def add_task_list_user(list_id, author_id, tasks):
         return True
     return
 
+def delete_task_list_user(list_id, author_id, task_id):
+    connection = get_connection()
+    users =  connection.execute(f"SELECT id FROM UserBot where id_discord={author_id}")
+    user_id = users.fetchone()[0]
+    lists_users = connection.execute(f"SELECT * FROM List where id={int(list_id)} AND owner_id={user_id}")
+    if lists_users.fetchone() and user_id:
+        connection.execute(f"SELECT id FROM Task where id={task_id}")
+        print('CHEGOU NO TASK DO DELETE TASK')
+        #connection.execute(f"INSERT INTO Task (desc, list_id, icon_status ) VALUES ('{task_item}',{int(list_id)},{1})");        
+        close_connection(connection)
+        return True
+    return    
+
