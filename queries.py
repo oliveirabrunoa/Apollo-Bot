@@ -61,10 +61,19 @@ def delete_task_list_user(list_id, author_id, task_id):
     user_id = users.fetchone()[0]
     lists_users = connection.execute(f"SELECT * FROM List where id={int(list_id)} AND owner_id={user_id}")
     if lists_users.fetchone() and user_id:
-        connection.execute(f"SELECT id FROM Task where id={task_id}")
-        print('CHEGOU NO TASK DO DELETE TASK')
-        #connection.execute(f"INSERT INTO Task (desc, list_id, icon_status ) VALUES ('{task_item}',{int(list_id)},{1})");        
+        connection.execute(f"DELETE FROM Task where list_id={int(list_id)} AND id={int(task_id)}");  
         close_connection(connection)
         return True
     return    
+
+def all_task_list_user(list_id, author_id):
+    connection = get_connection()
+    users =  connection.execute(f"SELECT id FROM UserBot where id_discord={author_id}")
+    user_id = users.fetchone()[0]
+    lists_users = connection.execute(f"SELECT * FROM List where id={int(list_id)} AND owner_id={user_id}")
+    if lists_users.fetchone() and user_id:
+        all_tasks_list = connection.execute(f"SELECT * FROM Task where list_id={int(list_id)}").fetchall()
+        close_connection(connection)
+        return all_tasks_list
+    return  
 

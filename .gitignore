@@ -2,3 +2,4 @@
 /bot_database.db
 /my_config.py
 /__pycache__
+/insert_values_local.py

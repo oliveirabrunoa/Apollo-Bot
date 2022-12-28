@@ -11,9 +11,7 @@ connection.execute("INSERT INTO ICON (NAME, ICON_NAME) VALUES ('REVIEW',':arrows
 connection.execute("INSERT INTO ICON (NAME, ICON_NAME) VALUES ('REJECT',':sos:')");
 
 #USERBOT INSERT
-connection.execute("INSERT INTO UserBot (NAME, id_discord, USER_DISCORD, EMAIL_DISCORD) VALUES ('Bruno Oliveira','1050592371584290836','Bruno Oliveira#5347','unasolucoesdigitais@gmail.com')");
-connection.execute("INSERT INTO UserBot (NAME, id_discord, USER_DISCORD, EMAIL_DISCORD) VALUES ('André Nery','1052993072289550399','André Nery#9696','andrenerytreinamentos@gmail.com')");
-connection.execute("INSERT INTO UserBot (NAME, id_discord, USER_DISCORD, EMAIL_DISCORD) VALUES ('Danilo Bacellar','1053818277530452051','Danilo Bacellar#8607','danilo@unasolucoesdigitais.com.br')");
+connection.execute("INSERT INTO UserBot (NAME, id_discord, USER_DISCORD, EMAIL_DISCORD) VALUES ({NAME USER},{DISCORD USER ID},{USERNAME ON DISCORD},{EMAIL ACCOUNT ON DISCORDucoesdigitais.com.br')");
 '''
 #LIST INSERT
 connection.execute("INSERT INTO List (NAME, owner_id ) VALUES ('TODO',1)");
