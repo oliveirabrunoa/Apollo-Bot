@@ -11,6 +11,12 @@ def close_connection(connection):
     connection.close()
     return
 
+def get_icons():
+    connection = get_connection()
+    icons = connection.execute(f"SELECT * FROM Icon").fetchall()
+    close_connection(connection)
+    return icons
+
 #LIST
 def get_list_user(author_id):
     connection = get_connection()
@@ -70,10 +76,10 @@ def all_task_list_user(list_id, author_id):
     connection = get_connection()
     users =  connection.execute(f"SELECT id FROM UserBot where id_discord={author_id}")
     user_id = users.fetchone()[0]
-    lists_users = connection.execute(f"SELECT * FROM List where id={int(list_id)} AND owner_id={user_id}")
-    if lists_users.fetchone() and user_id:
+    lists_users = connection.execute(f"SELECT * FROM List where id={int(list_id)} AND owner_id={user_id}").fetchone()
+    if lists_users and user_id:
         all_tasks_list = connection.execute(f"SELECT * FROM Task where list_id={int(list_id)}").fetchall()
         close_connection(connection)
-        return all_tasks_list
+        return {'list_name': lists_users[1] ,'tasks_list':all_tasks_list}
     return  
 

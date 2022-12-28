@@ -3,7 +3,8 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import my_config
-import queries         
+import queries  
+import embed_settings       
 
 #bot settings
 intents = discord.Intents.default()
@@ -101,14 +102,24 @@ def split_tasks(tasks_list):
   return tasks
 
 @bot.command(name="tarefas")
-async def get_tasks_by_list(ctx):
+async def get_tasks_by_list_id(ctx):
   await ctx.send("Digite o #ID da lista para consultar as tarefas.")
   message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
   tasks_list = queries.all_task_list_user(message.content, ctx.author.id)
   if len(tasks_list) == 0:
     await ctx.send("Não existem listas criadas para este usuário")
   else:
-    await ctx.send(tasks_list) #formatar lista aqui
-    
+    #await ctx.send(tasks_list) 
+    await ctx.send(embed=embed_settings.tasks_by_list(tasks_list = tasks_list)) 
+    #await ctx.send()
+
+@bot.command(name="teste")
+async def teste(ctx):
+  tasks = [('#','eu', 'descricao'),(':new:','me','descricao')]
+  await ctx.send(embed=embed_settings.tasks_by_list(title_embed='Minha lista TO-DO', color_embed = 0x39ff14,  tasks_list = tasks))
+
+
+  
+  #Apollo
 #keep_alive()
 bot.run(my_config.TOKEN)
