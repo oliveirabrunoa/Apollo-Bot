@@ -20,15 +20,24 @@ def get_icons():
     close_connection(connection)
     return list_icons
 
+def get_username(author_id):
+    connection = get_connection()
+    users =  connection.execute(f"SELECT * FROM UserBot where id_discord={author_id}").fetchone()
+    close_connection(connection)
+    return {'id': users[0],'name': users[1]}
+
 #LIST
 def get_list_user(author_id):
     connection = get_connection()
     users =  connection.execute(f"SELECT id FROM UserBot where id_discord={author_id}")
     user_id = users.fetchone()[0]
+    list_format = []
     if user_id:
         lists_users = connection.execute(f"SELECT * FROM List where owner_id={user_id}").fetchall()
+        for l in lists_users:
+            list_format.append({'id': l[0],'name': l[1]})
         close_connection(connection)
-        return lists_users
+        return list_format
     return "Ocorreu um erro ao consultar a lista"
 
 def create_list_user(list_name, author_id):

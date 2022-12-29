@@ -23,7 +23,8 @@ async def get_lists(ctx):
   if len(user_listas) == 0:
     await ctx.send("Não existem listas criadas para este usuário")
   else:
-    await ctx.send(user_listas) #formatar lista aqui
+    embed = embed_settings.lists_by_user(user_listas,ctx.author.id)
+    await ctx.send(embed=embed)
 
 @bot.command(name="add")
 async def add_list(ctx):
