@@ -13,9 +13,12 @@ def close_connection(connection):
 
 def get_icons():
     connection = get_connection()
+    list_icons = []
     icons = connection.execute(f"SELECT * FROM Icon").fetchall()
+    for i in icons:
+        list_icons.append({'id': i[0],'icon_name': i[2]})
     close_connection(connection)
-    return icons
+    return list_icons
 
 #LIST
 def get_list_user(author_id):

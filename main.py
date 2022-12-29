@@ -109,17 +109,8 @@ async def get_tasks_by_list_id(ctx):
   if len(tasks_list) == 0:
     await ctx.send("Não existem listas criadas para este usuário")
   else:
-    #await ctx.send(tasks_list) 
     await ctx.send(embed=embed_settings.tasks_by_list(tasks_list = tasks_list)) 
-    #await ctx.send()
 
-@bot.command(name="teste")
-async def teste(ctx):
-  tasks = [('#','eu', 'descricao'),(':new:','me','descricao')]
-  await ctx.send(embed=embed_settings.tasks_by_list(title_embed='Minha lista TO-DO', color_embed = 0x39ff14,  tasks_list = tasks))
-
-
-  
-  #Apollo
+#Apollo
 #keep_alive()
 bot.run(my_config.TOKEN)
