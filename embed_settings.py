@@ -6,7 +6,7 @@ list_icons = queries.get_icons()
 def tasks_by_list(tasks_list): 
   embed = discord.Embed(
     title = '``Lista: {0}``'.format(tasks_list['list_name']),
-    color = 0xfa5537)
+    color = 0xffffff)
   
   all_tasks = tasks_list['tasks_list']
   task_format=' '
@@ -33,3 +33,23 @@ def lists_by_user(lists, author_id):
 
     embed.add_field(name='Essas são as suas listas:',value='{0}'.format(list_format), inline=False)
     return embed
+
+def successful(message_embed):    
+    embed = discord.Embed(
+    title = '{0}'.format(message_embed),
+    color = 0x00ff00)
+    return embed
+
+def failure(message_embed, description):    
+    embed = discord.Embed(
+    title = '{0}'.format(message_embed),
+    description= '{0}'.format(description),
+    color = 0xe32b2b)
+    return embed
+
+def info(message_embed, description):    
+    embed = discord.Embed(
+    title = '{0}'.format(message_embed),
+    description= '{0}'.format(description),
+    color = 0x3b81f1)
+    return embed    

@@ -20,8 +20,9 @@ async def on_ready():
 async def get_lists(ctx):
  # await ctx.message.delete()
   user_listas = queries.get_list_user(ctx.author.id)
-  if len(user_listas) == 0:
-    await ctx.send("Não existem listas criadas para este usuário")
+  if not user_listas or len(user_listas) == 0:
+    embed = embed_settings.info("``Não existem listas criadas para este usuário``","")
+    await ctx.send(embed=embed)
   else:
     embed = embed_settings.lists_by_user(user_listas,ctx.author.id)
     await ctx.send(embed=embed)
@@ -35,9 +36,9 @@ async def add_list(ctx):
     await ctx.send("Qual será o nome da nova lista?")
     message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
     queries.create_list_user(message.content,ctx.author.id)
-    await ctx.send(f"A lista **{message.content}** foi **CRIADA** com sucesso!")
-    return
-
+    embed = embed_settings.successful(f"```Lista {message.content} foi CRIADA com sucesso!```")
+    await ctx.send(embed=embed)
+    
   if 'tarefa' in ctx.message.content:
     await ctx.send("Digite o #ID da lista para a qual deseja adicionar a tarefa.")
     user_listas = queries.get_list_user(ctx.author.id)
@@ -48,14 +49,12 @@ async def add_list(ctx):
     tasks = split_tasks(tasks_user.content)
     result = queries.add_task_list_user(message.content,ctx.author.id, tasks)
     if result is True:
-      await ctx.send(f"A tarefa **CRIADA** com sucesso!")
+      embed = embed_settings.successful(f"``Tarefa criada com sucesso!``")
+      await ctx.send(embed=embed)
     if result is False:
-      await ctx.send(f"**NÃO foi possível criar a tarefa!** \n Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário")
-
-  else:
-    await ctx.send("Comando desconhecido. Caso tenha dúvidas, digite +help")
-    return
-
+      embed = embed_settings.failure(f"``Não foi possível criar a Tarefa!``", "Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário")
+      await ctx.send(embed=embed)
+ 
 @bot.command(name="delete")
 async def delete_list(ctx):
   if ctx.message.author == bot.user:
@@ -69,9 +68,9 @@ async def delete_list(ctx):
     message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
     result = queries.delete_list_user(message.content,ctx.author.id)
     if result is True:
-      await ctx.send(f"A lista **#{message.content}** foi **DELETADA** com sucesso!")
+      await ctx.send(embed=embed_settings.successful(f"```Lista {message.content} foi deletada com sucesso!```"))
     if result is False:
-      await ctx.send(f"**NÃO foi possível deletar a lista informada!** \n Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário e não pode ser deletada por outro(s)")
+      await ctx.send(embed=embed_settings.successful(f"```Não foi possível deletar a lista informada!```","Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário e não pode ser deletada por outro(s)"))
 
 
   if 'tarefa'in ctx.message.content:
@@ -82,19 +81,15 @@ async def delete_list(ctx):
 
     message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
     list_id = message.content
-    result_tasks_list = queries.all_task_list_user(message.content,ctx.author.id)
-    await ctx.send(result_tasks_list)
 
     await ctx.send("Digite o #ID da tarefa que deseja deletar. \n **ATENÇÃO:** esta ação não poderá ser desfeita!")
     message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
     result = queries.delete_task_list_user(list_id, ctx.author.id, message.content)
     if result is True:
-      await ctx.send(f"A tarefa **#{message.content}** foi **DELETADA** com sucesso!")
+      await ctx.send(embed=embed_settings.successful(f"```Tarefa deletada com sucesso!```"))
     if result is False:
-      await ctx.send(f"**NÃO foi possível deletar a tarefa informada!** \n Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário e não pode ser deletada por outro(s)")
-  else:
-    await ctx.send("Comando desconhecido. Caso tenha dúvidas, digite +help")
-    return
+      await ctx.send(embed=embed_settings.failure(f"```Não foi possível deletar a tarefa informada!```","Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário e não pode ser deletada por outro(s)"))
+    if result is None: await ctx.send(embed=embed_settings.failure(f"```Não foi possível deletar a tarefa informada!```","Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário e não pode ser deletada por outro(s) \n - Indisponibilidade de Serviço. Fale com o administrador"))
  
 def split_tasks(tasks_list):
   tasks=[]
@@ -104,13 +99,14 @@ def split_tasks(tasks_list):
 
 @bot.command(name="tarefas")
 async def get_tasks_by_list_id(ctx):
-  await ctx.send("Digite o #ID da lista para consultar as tarefas.")
+  await ctx.send("Digite o #ID da lista para consultar as tarefas:")
   message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
   tasks_list = queries.all_task_list_user(message.content, ctx.author.id)
-  if len(tasks_list) == 0:
-    await ctx.send("Não existem listas criadas para este usuário")
+  if not tasks_list or len(tasks_list) == 0:
+    embed = embed_settings.failure("``Não foi possível consultar as Tarefas para o #ID informado!``", "Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista está sem tarefas criadas \n - A lista informada não pertence ao usuário")
+    await ctx.send(embed=embed)
   else:
-    await ctx.send(embed=embed_settings.tasks_by_list(tasks_list = tasks_list)) 
+    await ctx.send(embed=embed_settings.tasks_by_list(tasks_list)) 
 
 #Apollo
 #keep_alive()

@@ -71,7 +71,7 @@ def add_task_list_user(list_id, author_id, tasks):
             connection.execute(f"INSERT INTO Task (desc, list_id, icon_status ) VALUES ('{task_item}',{int(list_id)},{1})");        
         close_connection(connection)
         return True
-    return
+    return False
 
 def delete_task_list_user(list_id, author_id, task_id):
     connection = get_connection()
@@ -82,7 +82,8 @@ def delete_task_list_user(list_id, author_id, task_id):
         connection.execute(f"DELETE FROM Task where list_id={int(list_id)} AND id={int(task_id)}");  
         close_connection(connection)
         return True
-    return    
+    else:
+        return False   
 
 def all_task_list_user(list_id, author_id):
     connection = get_connection()
@@ -91,7 +92,12 @@ def all_task_list_user(list_id, author_id):
     lists_users = connection.execute(f"SELECT * FROM List where id={int(list_id)} AND owner_id={user_id}").fetchone()
     if lists_users and user_id:
         all_tasks_list = connection.execute(f"SELECT * FROM Task where list_id={int(list_id)}").fetchall()
-        close_connection(connection)
-        return {'list_name': lists_users[1] ,'tasks_list':all_tasks_list}
-    return  
+        if len(all_tasks_list) > 0:
+            close_connection(connection)
+            return {'list_name': lists_users[1] ,'tasks_list':all_tasks_list}
+        else:
+            close_connection(connection)
+            return False
+    close_connection(connection)
+    return  False
 
