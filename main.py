@@ -113,7 +113,7 @@ async def update_tasks(ctx):
   message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
   update_task = queries.task_user_by_id(int(message.content), ctx.author.id)
   if not update_task or len(update_task) == 0:
-    embed = embed_settings.failure("``Não foi localizar a tarefa informada!``")
+    embed = embed_settings.failure("``Não foi localizar a tarefa informada!``", "Verifique o ID e tente novamente")
     await ctx.send(embed=embed)
   else:
     await ctx.send('Tarefa localizada!')
@@ -123,7 +123,6 @@ async def update_tasks(ctx):
 async def all_tasks_by_user(ctx):
   tasks_list = queries.all_task_by_user(ctx.author.id)
   if not tasks_list or len(tasks_list) == 0:
-    #CORRIGIR ISSO AQUI
     embed = embed_settings.failure(f"``Não foi possível consultar suas tarefas!``",'Verifique o ID e tente novamente')
     await ctx.send(embed=embed)
   else:
