@@ -101,3 +101,31 @@ def all_task_list_user(list_id, author_id):
     close_connection(connection)
     return  False
 
+def task_user_by_id(task_id, author_id):
+    connection = get_connection()
+    users =  connection.execute(f"SELECT id FROM UserBot where id_discord={author_id}")
+    user_id = users.fetchone()[0]
+    task_by_id = connection.execute(f"SELECT Task.id, Task.desc, Task.icon_status FROM Task INNER JOIN List on Task.list_id=List.id \
+                WHERE Task.id={int(task_id)} and List.owner_id={int(user_id)}").fetchone()
+    if task_by_id:
+        close_connection(connection)
+        return {'task_id': task_by_id[0] ,'tasks_desc':task_by_id[1],'task_status_icon': task_by_id[2]}
+    else:
+        return False
+
+
+def all_task_by_user(author_id):
+    connection = get_connection()
+    users =  connection.execute(f"SELECT id FROM UserBot where id_discord={author_id}")
+    user_id = users.fetchone()[0]
+    list_task_by_id = connection.execute(f"SELECT List.id, List.name, Task.id, Task.desc, Task.icon_status FROM Task INNER JOIN List on Task.list_id=List.id \
+                WHERE List.owner_id={int(user_id)}").fetchall()
+    list_format=[]                
+    if len(list_task_by_id) > 0:
+        for list in list_task_by_id:
+            list_format.append({'list_id': list[0],'list_name':list[1],
+        'task_id':list[2], 'task_desc':list[3],'task_status_icon':list[4]})
+        close_connection(connection)
+        return list_format
+    else:
+        return False

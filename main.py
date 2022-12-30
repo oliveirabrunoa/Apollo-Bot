@@ -63,7 +63,6 @@ async def delete_list(ctx):
   if 'lista' in ctx.message.content:
     await ctx.send("Digite o #ID da lista que deseja deletar. \n **ATENÇÃO:** esta ação não poderá ser desfeita!")
     user_listas = queries.get_list_user(ctx.author.id)
-    response = (f"Resultado teste: {user_listas} =)")
     await ctx.send(user_listas)
     message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
     result = queries.delete_list_user(message.content,ctx.author.id)
@@ -76,7 +75,6 @@ async def delete_list(ctx):
   if 'tarefa'in ctx.message.content:
     await ctx.send("Digite o #ID da lista que contém a tarefa que deseja deletar. \n **ATENÇÃO:** esta ação não poderá ser desfeita!")
     user_listas = queries.get_list_user(ctx.author.id)
-    response = (f"Resultado teste: {user_listas} =)")
     await ctx.send(user_listas)
 
     message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
@@ -107,6 +105,29 @@ async def get_tasks_by_list_id(ctx):
     await ctx.send(embed=embed)
   else:
     await ctx.send(embed=embed_settings.tasks_by_list(tasks_list)) 
+
+
+@bot.command(name="update")
+async def update_tasks(ctx):
+  await ctx.send("Digite o #ID da tarefa que deseja atualizar:")
+  message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
+  update_task = queries.task_user_by_id(int(message.content), ctx.author.id)
+  if not update_task or len(update_task) == 0:
+    embed = embed_settings.failure("``Não foi localizar a tarefa informada!``")
+    await ctx.send(embed=embed)
+  else:
+    await ctx.send('Tarefa localizada!')
+    await ctx.send(embed=embed_settings.task_id(update_task))  
+
+@bot.command(name="all")
+async def all_tasks_by_user(ctx):
+  tasks_list = queries.all_task_by_user(ctx.author.id)
+  if not tasks_list or len(tasks_list) == 0:
+    #CORRIGIR ISSO AQUI
+    embed = embed_settings.failure(f"``Não foi possível consultar suas tarefas!``",'Verifique o ID e tente novamente')
+    await ctx.send(embed=embed)
+  else:
+    await ctx.send(embed=embed_settings.my_tasks(tasks_list))  
 
 #Apollo
 #keep_alive()

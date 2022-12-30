@@ -53,3 +53,23 @@ def info(message_embed, description):
     description= '{0}'.format(description),
     color = 0x3b81f1)
     return embed    
+
+def my_tasks(tasks_list): 
+  embed = discord.Embed(
+    title = '``Suas Tarefas (todas as listas):``',
+    color = 0xFFFF00)
+  
+  all_task_format=' '
+  for t in tasks_list:    
+    all_task_format+= '**#ID: {0}**:  {1} | **Status**: {2} | **Lista**: {3} \n'.format(t.get('task_id'), t.get('task_desc'),
+    get_icon_by_id(int(t.get('task_status_icon'))), t.get('list_name')) 
+        
+  embed.add_field(name='Tarefas:',value='{0}'.format(all_task_format), inline=False)
+  return embed
+
+def task_id(update_task): 
+  embed = discord.Embed(
+      color = 0xFFFF00)  
+  all_task_format= '**#ID**: {0} | Tarefa: {1} | Status: {2}'.format(update_task.get('task_id'),update_task.get('tasks_desc'),update_task.get('task_status_icon'))
+  embed.add_field(name='Tarefa:',value='{0}'.format(all_task_format), inline=False)
+  return embed
