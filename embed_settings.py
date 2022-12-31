@@ -54,6 +54,18 @@ def info(message_embed, description):
     color = 0x3b81f1)
     return embed    
 
+def get_all_status_task(): 
+    icons_format = queries.get_icons()
+    temp=' '
+    for icon in icons_format:
+      temp+= '{0} | **#ID**: {1} | {2} \n'.format(icon.get('icon_name'),icon.get('id'),icon.get('name')) 
+
+    embed = discord.Embed(
+    title = '{0}'.format("Status Disponíveis:"),
+    description= '{0}'.format(temp),
+    color = 0x00FFFF)  
+    return embed        
+
 def my_tasks(tasks_list): 
   embed = discord.Embed(
     title = '``Suas Tarefas (todas as listas):``',
@@ -70,6 +82,24 @@ def my_tasks(tasks_list):
 def task_id(update_task): 
   embed = discord.Embed(
       color = 0xFFFF00)  
-  all_task_format= '**#ID**: {0} | Tarefa: {1} | Status: {2}'.format(update_task.get('task_id'),update_task.get('tasks_desc'),update_task.get('task_status_icon'))
+  all_task_format= '**#ID**: {0} | **Tarefa**: {1} | **Status**: {2}'.format(update_task.get('task_id'),update_task.get('tasks_desc'),update_task.get('task_status_icon'))
   embed.add_field(name='Tarefa:',value='{0}'.format(all_task_format), inline=False)
   return embed
+
+def help_bot():  
+  embed = discord.Embed(
+  title = '{0}'.format("Help"),
+  description= '{0}'.format("Confira as ações disponíveis na versão 1.0"),
+  color = 0xdaa520)
+
+  embed.add_field(name=':small_blue_diamond: Consultar todas as listas:',value='{0}'.format("+listas"), inline=False)
+  embed.add_field(name=':small_blue_diamond: Criar nova lista:',value='{0}'.format("+add lista"), inline=False)
+  embed.add_field(name=':small_blue_diamond: Deletar uma lista:',value='{0}'.format("+delete lista"), inline=False)
+
+  embed.add_field(name=':small_blue_diamond: Consultar todas as tarefas de uma lista:',value='{0}'.format("+tarefas"), inline=False)
+  embed.add_field(name=':small_blue_diamond: Criar uma nova tarefa:',value='{0}'.format("+add tarefa"), inline=False)
+  embed.add_field(name=':small_blue_diamond: Deletar uma tarefa:',value='{0}'.format("+delete tarefa"), inline=False)
+  embed.add_field(name=':small_blue_diamond: Atualizar status de uma tarefa:',value='{0}'.format("+update"), inline=False)
+  embed.add_field(name=':small_blue_diamond: Visualizar as tarefas de todas as listas:',value='{0}'.format("+all"), inline=False)
+
+  return embed 

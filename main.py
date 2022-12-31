@@ -10,6 +10,7 @@ import embed_settings
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(intents=intents, command_prefix="+")
+bot.remove_command('help')
 user_listas=[]
 
 @bot.event
@@ -112,12 +113,20 @@ async def update_tasks(ctx):
   await ctx.send("Digite o #ID da tarefa que deseja atualizar:")
   message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
   update_task = queries.task_user_by_id(int(message.content), ctx.author.id)
-  if not update_task or len(update_task) == 0:
+  if not update_task or len(update_task) <= 0:
     embed = embed_settings.failure("``Não foi localizar a tarefa informada!``", "Verifique o ID e tente novamente")
     await ctx.send(embed=embed)
   else:
     await ctx.send('Tarefa localizada!')
-    await ctx.send(embed=embed_settings.task_id(update_task))  
+    await ctx.send(embed=embed_settings.task_id(update_task))
+    await ctx.send('Digite o #ID do Status para o qual deseja atualizar a tarefa selecionada:')
+    await ctx.send(embed=embed_settings.get_all_status_task())
+    message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)  
+    update_task_status = queries.update_task(update_task.get('task_id'),message.content,ctx.author.id)
+    if update_task_status is False:
+      await ctx.send(embed=embed_settings.failure("Não foi possível atualizar a tarefa informada", "Verifique o status informado e tente novamente."))
+    else:
+      await ctx.send(embed=embed_settings.successful("Status da tarefa atualizado com sucesso!"))
 
 @bot.command(name="all")
 async def all_tasks_by_user(ctx):
@@ -127,6 +136,11 @@ async def all_tasks_by_user(ctx):
     await ctx.send(embed=embed)
   else:
     await ctx.send(embed=embed_settings.my_tasks(tasks_list))  
+
+@bot.command(name="help")
+async def help_bot(ctx):
+  embed = embed_settings.failure(f"``Não foi possível consultar suas tarefas!``",'Verifique o ID e tente novamente')
+  await ctx.send(embed=embed_settings.help_bot())    
 
 #Apollo
 #keep_alive()

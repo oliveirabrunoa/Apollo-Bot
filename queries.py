@@ -1,4 +1,5 @@
 import sqlite3
+import numbers
 
 def get_connection():
     #database settings
@@ -16,7 +17,7 @@ def get_icons():
     list_icons = []
     icons = connection.execute(f"SELECT * FROM Icon").fetchall()
     for i in icons:
-        list_icons.append({'id': i[0],'icon_name': i[2]})
+        list_icons.append({'id': i[0],'icon_name': i[2], 'name': i[1]})
     close_connection(connection)
     return list_icons
 
@@ -113,7 +114,6 @@ def task_user_by_id(task_id, author_id):
     else:
         return False
 
-
 def all_task_by_user(author_id):
     connection = get_connection()
     users =  connection.execute(f"SELECT id FROM UserBot where id_discord={author_id}")
@@ -127,5 +127,21 @@ def all_task_by_user(author_id):
         'task_id':list[2], 'task_desc':list[3],'task_status_icon':list[4]})
         close_connection(connection)
         return list_format
+    else:
+        return False
+
+def update_task(task_id, status_id, author_id):
+    connection = get_connection()
+    users =  connection.execute(f"SELECT id FROM UserBot where id_discord={author_id}")
+    user_id = users.fetchone()[0]
+    update_task_final=''               
+    if isinstance(task_id,numbers.Integral):
+        try:
+            update_task_final = connection.execute(f"UPDATE Task SET icon_status={int(status_id)}  \
+                    WHERE Task.id={int(task_id)}").fetchall()
+            close_connection(connection)
+            return update_task_final
+        except:
+            return False
     else:
         return False
