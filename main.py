@@ -2,9 +2,10 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-import my_config
+#import my_config
 import queries  
 import embed_settings       
+import os
 
 #bot settings
 intents = discord.Intents.default()
@@ -157,7 +158,6 @@ async def help_bot(ctx):
   embed = embed_settings.failure(f"``Não foi possível consultar suas tarefas!``",'Verifique o ID e tente novamente')
   await ctx.send(embed=embed_settings.help_bot())    
 
- 
-#Apollo
 #keep_alive()
-bot.run(my_config.TOKEN)
+#bot.run(my_config.TOKEN) -- Local
+bot.run(os.getenv('TOKEN'))  #Server Config
