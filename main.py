@@ -4,7 +4,8 @@ from discord import app_commands
 from discord.ext import commands
 import my_config
 import queries  
-import embed_settings       
+import embed_settings
+import os   
 
 #bot settings
 intents = discord.Intents.default()
@@ -160,4 +161,5 @@ async def help_bot(ctx):
  
 #Apollo
 #keep_alive()
-bot.run(my_config.TOKEN)
+#bot.run(my_config.TOKEN) #local settings
+bot.run(os.getenv("TOKEN"))

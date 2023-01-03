@@ -1,17 +1,35 @@
 import sqlite3
+import os
 
 #database settings
 connection = sqlite3.connect("bot_database.db")
 connection.execute("PRAGMA foreign_keys = ON")              
 
-#ICONS INSERT
+#ICONS INSERT :warning:
 connection.execute("INSERT INTO ICON (NAME, ICON_NAME) VALUES ('NEW',':new:')");
+connection.execute("INSERT INTO ICON (NAME, ICON_NAME) VALUES ('DOING',':pushpin:')");
 connection.execute("INSERT INTO ICON (NAME, ICON_NAME) VALUES ('DONE',':white_check_mark:')");
-connection.execute("INSERT INTO ICON (NAME, ICON_NAME) VALUES ('REVIEW',':arrows_counterclockwise:')");
-connection.execute("INSERT INTO ICON (NAME, ICON_NAME) VALUES ('REJECT',':sos:')");
+connection.execute("INSERT INTO ICON (NAME, ICON_NAME) VALUES ('REVIEW',':warning:')");
+connection.execute("INSERT INTO ICON (NAME, ICON_NAME) VALUES ('PROBLEM',':sos:')");
+
+#User Settings
+u1_name=os.getenv("NAME_USER1")
+u2_name=os.getenv("NAME_USER2")
+u3_name=os.getenv("NAME_USER3")
+u1_id_discord=os.getenv("ID_DISCORD_USER1")
+u2_id_discord=os.getenv("ID_DISCORD_USER2")
+u3_id_discord=os.getenv("ID_DISCORD_USER3")
+u1_discord=os.getenv("USER_DISCORD_USER1")
+u2_discord=os.getenv("USER_DISCORD_USER2")
+u3_discord=os.getenv("USER_DISCORD_USER3")
+u1_email=os.getenv("EMAIL_DISCORD_USER1")
+u2_email=os.getenv("EMAIL_DISCORD_USER2")
+u3_email=os.getenv("EMAIL_DISCORD_USER3")
 
 #USERBOT INSERT
-connection.execute("INSERT INTO UserBot (NAME, id_discord, USER_DISCORD, EMAIL_DISCORD) VALUES ({NAME USER},{DISCORD USER ID},{USERNAME ON DISCORD},{EMAIL ACCOUNT ON DISCORD')");
+connection.execute(f"INSERT INTO UserBot (NAME, id_discord, USER_DISCORD, EMAIL_DISCORD) VALUES ('{u1_name}','{u1_id_discord}','{u1_discord}','{u1_email}')");
+connection.execute(f"INSERT INTO UserBot (NAME, id_discord, USER_DISCORD, EMAIL_DISCORD) VALUES ('{u2_name}','{u2_id_discord}','{u2_discord}','{u2_email}')");
+connection.execute(f"INSERT INTO UserBot (NAME, id_discord, USER_DISCORD, EMAIL_DISCORD) VALUES ('{u3_name}','{u3_id_discord}','{u3_discord}','{u3_email}')");
 '''
 #LIST INSERT
 connection.execute("INSERT INTO List (NAME, owner_id ) VALUES ('TODO',1)");

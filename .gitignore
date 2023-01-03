@@ -2,6 +2,7 @@
 /bot_database.db
 /my_config.py
 /__pycache__
+/venv
 /insert_values_local.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
