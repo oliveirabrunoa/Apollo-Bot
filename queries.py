@@ -36,7 +36,7 @@ def get_list_user(author_id):
     if user_id:
         lists_users = connection.execute(f"SELECT * FROM List where owner_id={user_id}").fetchall()
         for l in lists_users:
-            list_format.append({'id': l[0],'name': l[1]})
+            list_format.append({'id': l[0],'name': l[1], 'note_list': l[2]})
         close_connection(connection)
         return list_format
     return "Ocorreu um erro ao consultar a lista"
@@ -95,7 +95,7 @@ def all_task_list_user(list_id, author_id):
         all_tasks_list = connection.execute(f"SELECT * FROM Task where list_id={int(list_id)}").fetchall()
         if len(all_tasks_list) > 0:
             close_connection(connection)
-            return {'list_name': lists_users[1] ,'tasks_list':all_tasks_list}
+            return {'list_name': lists_users[1] ,'tasks_list':all_tasks_list, 'note_content': lists_users[2]}
         else:
             close_connection(connection)
             return False
@@ -145,3 +145,18 @@ def update_task(task_id, status_id, author_id):
             return False
     else:
         return False
+
+def create_or_update_note(list_id, note_content, author_id):
+    connection = get_connection()
+    users =  connection.execute(f"SELECT id FROM UserBot where id_discord={author_id}")
+    user_id = users.fetchone()[0]            
+    if isinstance(list_id,numbers.Integral):
+        try:
+            connection.execute(f"UPDATE List SET note_list='{note_content}' WHERE List.id={int(list_id)}")
+            close_connection(connection)
+            return True
+        except:
+            return False
+    else:
+        return False        
+       

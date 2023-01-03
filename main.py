@@ -33,6 +33,21 @@ async def add_list(ctx):
   if ctx.message.author == bot.user:
     return
 
+  if 'note' in ctx.message.content:
+    await ctx.send("Digite o #ID da lista para qual deseja adicionar uma anotação:")
+    message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
+    list_id = message.content
+    await ctx.send(f"Digite sua anotação para lista {list_id}:")
+    message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
+    note_content = message.content
+    result = queries.create_or_update_note(int(list_id),note_content,ctx.author.id)
+    if result is True:
+      embed = embed_settings.successful(f"```Nota adicionada com sucesso!```")
+      await ctx.send(embed=embed)
+    if result is False: 
+      embed = embed_settings.failure(f"``Não foi possível adicionar esta nota!``", "Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário")
+      await ctx.send(embed=embed)
+
   if 'lista' in ctx.message.content:
     await ctx.send("Qual será o nome da nova lista?")
     message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
@@ -43,7 +58,7 @@ async def add_list(ctx):
   if 'tarefa' in ctx.message.content:
     await ctx.send("Digite o #ID da lista para a qual deseja adicionar a tarefa.")
     user_listas = queries.get_list_user(ctx.author.id)
-    await ctx.send(user_listas)
+    #await ctx.send(user_listas) #AQUI
     message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
     await ctx.send("Digite a(s) tarefa(s) que deseja adicionar separadas por (;) ponto e virgula.")
     tasks_user = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
@@ -56,7 +71,7 @@ async def add_list(ctx):
       embed = embed_settings.failure(f"``Não foi possível criar a Tarefa!``", "Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário")
       await ctx.send(embed=embed)
  
-@bot.command(name="delete")
+@bot.command(name="del")
 async def delete_list(ctx):
   if ctx.message.author == bot.user:
     return
@@ -64,7 +79,7 @@ async def delete_list(ctx):
   if 'lista' in ctx.message.content:
     await ctx.send("Digite o #ID da lista que deseja deletar. \n **ATENÇÃO:** esta ação não poderá ser desfeita!")
     user_listas = queries.get_list_user(ctx.author.id)
-    await ctx.send(user_listas)
+    #await ctx.send(user_listas)
     message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
     result = queries.delete_list_user(message.content,ctx.author.id)
     if result is True:
@@ -76,7 +91,7 @@ async def delete_list(ctx):
   if 'tarefa'in ctx.message.content:
     await ctx.send("Digite o #ID da lista que contém a tarefa que deseja deletar. \n **ATENÇÃO:** esta ação não poderá ser desfeita!")
     user_listas = queries.get_list_user(ctx.author.id)
-    await ctx.send(user_listas)
+    #await ctx.send(user_listas)
 
     message = await bot.wait_for('message', check=lambda message: message.author == ctx.author)
     list_id = message.content
@@ -142,6 +157,7 @@ async def help_bot(ctx):
   embed = embed_settings.failure(f"``Não foi possível consultar suas tarefas!``",'Verifique o ID e tente novamente')
   await ctx.send(embed=embed_settings.help_bot())    
 
+ 
 #Apollo
 #keep_alive()
 bot.run(my_config.TOKEN)

@@ -11,9 +11,10 @@ def tasks_by_list(tasks_list):
   all_tasks = tasks_list['tasks_list']
   task_format=' '
   for t in all_tasks:    
-    task_format+= '{0} | **#ID: {1}**:  {2} \n'.format(get_icon_by_id(t[3]),t[0],t[1]) 
+    task_format+= '{0} | **#ID: {1}** |  {2} \n'.format(get_icon_by_id(t[3]),t[0],t[1]) 
         
   embed.add_field(name='Tarefas:',value='{0}'.format(task_format), inline=False)
+  embed.add_field(name='Nota da Lista:',value='{0}'.format(tasks_list['note_content']), inline=False)
   return embed
 
 def get_icon_by_id(icon_id):
@@ -31,7 +32,7 @@ def lists_by_user(lists, author_id):
     for l in lists:
         list_format+= ':small_orange_diamond: **#ID: {0}**: {1} \n'.format(l.get('id'), l.get('name'))
 
-    embed.add_field(name='Essas são as suas listas:',value='{0}'.format(list_format), inline=False)
+    embed.add_field(name='Essas são as suas listas:',value='{0}'.format(list_format), inline=False) 
     return embed
 
 def successful(message_embed):    
@@ -73,7 +74,7 @@ def my_tasks(tasks_list):
   
   all_task_format=' '
   for t in tasks_list:    
-    all_task_format+= '**#ID: {0}**:  {1} | **Status**: {2} | **Lista**: {3} \n'.format(t.get('task_id'), t.get('task_desc'),
+    all_task_format+= '{2} | **{0}** | _{1}_ >> {3} \n'.format(t.get('task_id'), t.get('task_desc'),
     get_icon_by_id(int(t.get('task_status_icon'))), t.get('list_name')) 
         
   embed.add_field(name='Tarefas:',value='{0}'.format(all_task_format), inline=False)
@@ -94,11 +95,11 @@ def help_bot():
 
   embed.add_field(name=':small_blue_diamond: Consultar todas as listas:',value='{0}'.format("+listas"), inline=False)
   embed.add_field(name=':small_blue_diamond: Criar nova lista:',value='{0}'.format("+add lista"), inline=False)
-  embed.add_field(name=':small_blue_diamond: Deletar uma lista:',value='{0}'.format("+delete lista"), inline=False)
+  embed.add_field(name=':small_blue_diamond: Deletar uma lista:',value='{0}'.format("+del lista"), inline=False)
 
   embed.add_field(name=':small_blue_diamond: Consultar todas as tarefas de uma lista:',value='{0}'.format("+tarefas"), inline=False)
   embed.add_field(name=':small_blue_diamond: Criar uma nova tarefa:',value='{0}'.format("+add tarefa"), inline=False)
-  embed.add_field(name=':small_blue_diamond: Deletar uma tarefa:',value='{0}'.format("+delete tarefa"), inline=False)
+  embed.add_field(name=':small_blue_diamond: Deletar uma tarefa:',value='{0}'.format("+del tarefa"), inline=False)
   embed.add_field(name=':small_blue_diamond: Atualizar status de uma tarefa:',value='{0}'.format("+update"), inline=False)
   embed.add_field(name=':small_blue_diamond: Visualizar as tarefas de todas as listas:',value='{0}'.format("+all"), inline=False)
 

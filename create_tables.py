@@ -16,6 +16,7 @@ connection.execute("CREATE TABLE IF NOT EXISTS UserBot \
 connection.execute("CREATE TABLE IF NOT EXISTS List \
                     (id INTEGER PRIMARY KEY, \
                     name STRING, \
+                    note_list VARCHAR DEFAULT '', \
                     owner_id INTEGER NOT NULL, \
                     foreign key (owner_id) references UserBot(id));")
 connection.execute("CREATE TABLE IF NOT EXISTS Task \
