@@ -55,6 +55,7 @@ def delete_list_user(list_id, author_id):
     user_id = users.fetchone()[0]
     lists_users = connection.execute(f"SELECT * FROM List where id={int(list_id)} AND owner_id={user_id}")
     if lists_users.fetchone():
+        connection.execute(f"DELETE FROM Task where list_id={int(list_id)}");  
         connection.execute(f"DELETE FROM List where id={int(list_id)} AND owner_id={int(user_id)}");  
         close_connection(connection)
         return True
