@@ -2,7 +2,6 @@ from keep_alive import keep_alive
 import discord
 from discord import app_commands
 from discord.ext import commands
-#import my_config
 import queries
 import embed_settings
 import os
@@ -73,16 +72,23 @@ async def add_list(ctx):
     await ctx.send(
       "Digite o #ID da lista para a qual deseja adicionar a tarefa.")
     user_listas = queries.get_list_user(ctx.author.id)
-    #await ctx.send(user_listas) #AQUI
     message = await bot.wait_for(
       'message', check=lambda message: message.author == ctx.author)
     await ctx.send(
       "Digite a(s) tarefa(s) que deseja adicionar separadas por (;) ponto e virgula."
     )
-    tasks_user = await bot.wait_for(
-      'message', check=lambda message: message.author == ctx.author)
-    tasks = split_tasks(tasks_user.content)
-    result = queries.add_task_list_user(message.content, ctx.author.id, tasks)
+    task_list = []
+    flag=1
+    while(flag):
+      tasks_user = await bot.wait_for(
+        'message', check=lambda message: message.author == ctx.author)
+      if tasks_user.content != 'stop':
+        task_list.append(tasks_user.content)
+      else:
+        flag=0
+
+    result = queries.add_task_list_user(message.content, ctx.author.id, task_list)
+
     if result is True:
       embed = embed_settings.successful(f"``Tarefa criada com sucesso!``")
       await ctx.send(embed=embed)
@@ -91,7 +97,6 @@ async def add_list(ctx):
         f"``Não foi possível criar a Tarefa!``",
         "Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário"
       )
-      await ctx.send(embed=embed)
 
 
 @bot.command(name="del")
@@ -148,13 +153,6 @@ async def delete_list(ctx):
         f"```Não foi possível deletar a tarefa informada!```",
         "Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário e não pode ser deletada por outro(s) \n - Indisponibilidade de Serviço. Fale com o administrador"
       ))
-
-
-def split_tasks(tasks_list):
-  tasks = []
-  for task in tasks_list.split(';'):
-    tasks.append(task)
-  return tasks
 
 
 @bot.command(name="tarefas")
@@ -225,5 +223,6 @@ async def help_bot(ctx):
 
 #Apollo
 keep_alive()
+#import my_config
 #bot.run(my_config.TOKEN) #local settings
 bot.run(os.getenv("TOKEN"))
