@@ -109,5 +109,6 @@ def help_bot():
   embed.add_field(name=':small_blue_diamond: Deletar uma tarefa:',value='{0}'.format("+del tarefa"), inline=False)
   embed.add_field(name=':small_blue_diamond: Atualizar status de uma tarefa:',value='{0}'.format("+update"), inline=False)
   embed.add_field(name=':small_blue_diamond: Visualizar as tarefas de todas as listas:',value='{0}'.format("+all"), inline=False)
+  embed.add_field(name=':small_blue_diamond: Adicionar nota a uma lista:',value='{0}'.format("+add note"), inline=False)
 
   return embed 
