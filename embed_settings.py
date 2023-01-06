@@ -73,9 +73,13 @@ def my_tasks(tasks_list):
     color = 0xFFFF00)
   
   all_task_format=' '
-  for t in tasks_list:    
-    all_task_format+= '{2} | **{0}** | _{1}_ >> {3} \n'.format(t.get('task_id'), t.get('task_desc'),
-    get_icon_by_id(int(t.get('task_status_icon'))), t.get('list_name')) 
+  for t in tasks_list:
+    if get_icon_by_id(int(t.get('task_status_icon'))) == ':white_check_mark:':
+      all_task_format+= '{2} | **{0}** | ~~{1}~~ >> {3} \n'.format(t.get('task_id'), t.get('task_desc'),
+      get_icon_by_id(int(t.get('task_status_icon'))), t.get('list_name'))  
+    else: 
+      all_task_format+= '{2} | **{0}** | _{1}_ >> {3} \n'.format(t.get('task_id'), t.get('task_desc'),
+      get_icon_by_id(int(t.get('task_status_icon'))), t.get('list_name')) 
         
   embed.add_field(name='Tarefas:',value='{0}'.format(all_task_format), inline=False)
   return embed
