@@ -10,8 +10,11 @@ def tasks_by_list(tasks_list):
   
   all_tasks = tasks_list['tasks_list']
   task_format=' '
-  for t in all_tasks:    
-    task_format+= '{0} | **#ID: {1}** |  {2} \n'.format(get_icon_by_id(t[3]),t[0],t[1]) 
+  for t in all_tasks:
+    if get_icon_by_id(t[3]) == ':white_check_mark:':
+      task_format+= '{0} | **#ID: {1}** |  ~~{2}~~ \n'.format(get_icon_by_id(t[3]),t[0],t[1])
+    else:
+      task_format+= '{0} | **#ID: {1}** |  {2} \n'.format(get_icon_by_id(t[3]),t[0],t[1]) 
         
   embed.add_field(name='Tarefas:',value='{0}'.format(task_format), inline=False)
   embed.add_field(name='Nota da Lista:',value='{0}'.format(tasks_list['note_content']), inline=False)
