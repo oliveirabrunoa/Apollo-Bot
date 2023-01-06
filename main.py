@@ -75,7 +75,7 @@ async def add_list(ctx):
     message = await bot.wait_for(
       'message', check=lambda message: message.author == ctx.author)
     await ctx.send(
-      "Digite a(s) tarefa(s) que deseja adicionar separadas por (;) ponto e virgula."
+      "Digite a(s) tarefa(s) que deseja adicionar. Cada mensagem enviada a partir de agora será um item da lista selecionada, até que você informe a palavra **'Stop'** para finalizar as adições."
     )
     task_list = []
     flag=1
