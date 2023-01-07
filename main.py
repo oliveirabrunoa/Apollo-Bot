@@ -98,7 +98,6 @@ async def add_list(ctx):
         "Algumas causas possíveis: \n - Não existe lista com o #ID informado \n - A lista informada não pertence ao usuário"
       )
 
-
 @bot.command(name="del")
 async def delete_list(ctx):
   if ctx.message.author == bot.user:

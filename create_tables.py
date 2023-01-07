@@ -9,10 +9,7 @@ connection.execute("CREATE TABLE IF NOT EXISTS Icon \
                     icon_name STRING);")
 connection.execute("CREATE TABLE IF NOT EXISTS UserBot \
                     (id INTEGER PRIMARY KEY, \
-                    name STRING, \
-                    id_discord STRING, \
-                    user_discord STRING, \
-                    email_discord STRING);")                    
+                    id_discord STRING);")                    
 connection.execute("CREATE TABLE IF NOT EXISTS List \
                     (id INTEGER PRIMARY KEY, \
                     name STRING, \
